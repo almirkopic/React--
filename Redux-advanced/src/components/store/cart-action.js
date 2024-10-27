@@ -5,7 +5,7 @@ export const fetchCartData = () => {
   return async (dispatch) => {
     const fetchData = async () => {
       const response = await fetch(
-        "https://secret-396208-default-rtdb.firebaseio.com/cart.json"
+        "FIREBASE_DB_LINK"
       );
 
       if (!response.ok) {
