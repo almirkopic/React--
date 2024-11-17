@@ -1,9 +1,8 @@
-import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { Link, Outlet, useParams, useNavigate } from "react-router-dom";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import Header from "../Header.jsx";
 import { fetchEvent, deleteEvent, queryClient } from "../../util/http.js";
-import LoadingIndicator from "../UI/LoadingIndicator.jsx";
 import ErrorBlock from "../UI/ErrorBlock.jsx";
 import { useState } from "react";
 import Modal from "../UI/Modal.jsx";
@@ -11,8 +10,8 @@ import Modal from "../UI/Modal.jsx";
 export default function EventDetails() {
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const params = useParams();
   const navigate = useNavigate();
+  const params = useParams();
   const { data, isPending, isError, error } = useQuery({
     queryKey: ["events", params.id],
     queryFn: ({ signal }) => fetchEvent({ signal, id: params.id }),
@@ -38,7 +37,7 @@ export default function EventDetails() {
     setIsDeleting(true);
   }
 
-  function handleStopDeleting() {
+  function handleStopDelete() {
     setIsDeleting(false);
   }
 
@@ -51,7 +50,7 @@ export default function EventDetails() {
   if (isPending) {
     content = (
       <div id="event-details-content" className="center">
-        <LoadingIndicator />
+        <p>Fetching event data</p>
       </div>
     );
   }
@@ -60,11 +59,8 @@ export default function EventDetails() {
     content = (
       <div id="event-details-content" className="center">
         <ErrorBlock
-          title="An error occured while loading data"
-          message={
-            error.info?.message ||
-            "Something went wrong, please check your input and try again later."
-          }
+          title="Failed to load event"
+          message={error.info?.message || "Failed to fetch data."}
         />
       </div>
     );
@@ -76,6 +72,7 @@ export default function EventDetails() {
       month: "short",
       year: "numeric",
     });
+
     content = (
       <>
         <header>
@@ -85,6 +82,7 @@ export default function EventDetails() {
             <Link to="edit">Edit</Link>
           </nav>
         </header>
+
         <div id="event-details-content">
           <img src={`http://localhost:3000/${data.image}`} alt={data.title} />
           <div id="event-details-info">
@@ -104,18 +102,17 @@ export default function EventDetails() {
   return (
     <>
       {isDeleting && (
-        <Modal onClose={handleStopDeleting}>
-          <h2>Are you sure ?</h2>
+        <Modal onClose={handleStopDelete}>
+          <h1>Are you Sure?</h1>
           <p>
-            Do you really want to delete this event ? This action cannot be
+            Do you really want to delete this event? This action cannot be
             undone.
           </p>
           <div className="form-actions">
             {isPendingDeletion && <p>Deleting, please wait...</p>}
             {!isPendingDeletion && (
               <>
-                {" "}
-                <button onClick={handleStopDeleting} className="button-text">
+                <button onClick={handleStopDelete} className="button-text">
                   Cancel
                 </button>
                 <button onClick={handleDelete} className="button">
@@ -128,7 +125,7 @@ export default function EventDetails() {
             <ErrorBlock
               title="Failed to delete event"
               message={
-                error.info?.message ||
+                deleteError.info?.message ||
                 "Failed to delete event, please try again later."
               }
             />
