@@ -6,7 +6,7 @@ import {
   useSubmit,
   useNavigation,
 } from "react-router-dom";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 import Modal from "../UI/Modal.jsx";
 import EventForm from "./EventForm.jsx";
@@ -14,10 +14,10 @@ import { fetchEvent, updateEvent, queryClient } from "../../util/http.js";
 import ErrorBlock from "../UI/ErrorBlock.jsx";
 
 export default function EditEvent() {
-  const navigate = useNavigate();
-  const { state } = useNavigation();
-  const submit = useSubmit();
   const params = useParams();
+  const { state } = useNavigation();
+  const navigate = useNavigate();
+  const submit = useSubmit();
 
   const { data, isError, error } = useQuery({
     queryKey: ["events", params.id],
@@ -59,10 +59,10 @@ export default function EditEvent() {
     content = (
       <>
         <ErrorBlock
-          title="Failed to load event"
+          title="failed to load event"
           message={
             error.info?.message ||
-            "Failed to load events. Please check inputs or try again later."
+            "Failed to load event. Please try again later."
           }
         />
         <div className="form-actions">
