@@ -1,1 +1,1 @@
-![UI]("UI.jpeg")
+![UI]("UI.jpg")
