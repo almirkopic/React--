@@ -1,1 +1,1 @@
-![UI]("UI.jpg")
+![UI]("./UI.jpeg")
