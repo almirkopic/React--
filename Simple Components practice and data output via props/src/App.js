@@ -24,7 +24,7 @@ const concepts = [
       "Event handlers are added via props to (built-in) components. You pass functions as values to such event handlers to control which functions gets executed for which event.",
   },
 ];
-//data cam output with map()
+
 
 function App() {
   return (
